@@ -7,6 +7,11 @@ GIT
       popper_js (>= 1.9.9, < 2.0)
       sass (>= 3.4.19)
 
+PATH
+  remote: ../chupa-text
+  specs:
+    chupa-text (1.0.6)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -55,6 +60,9 @@ GEM
     bindex (0.5.0)
     builder (3.2.3)
     byebug (9.0.6)
+    cairo (1.15.9)
+      native-package-installer (>= 1.0.3)
+      pkg-config (>= 1.2.2)
     capybara (2.14.4)
       addressable
       mime-types (>= 1.16)
@@ -64,6 +72,17 @@ GEM
       xpath (~> 2.0)
     childprocess (0.7.1)
       ffi (~> 1.0, >= 1.0.11)
+    chupa-text-decomposer-html (1.0.1)
+      chupa-text
+      nokogiri
+    chupa-text-decomposer-libreoffice (1.0.0)
+      chupa-text-decomposer-pdf
+    chupa-text-decomposer-pdf (1.0.3)
+      chupa-text
+      poppler
+    chupa-text-decomposer-spreadsheet (1.0.0)
+      chupa-text
+      roo
     coffee-rails (4.2.2)
       coffee-script (>= 2.2.0)
       railties (>= 4.0.0)
@@ -75,8 +94,18 @@ GEM
     erubi (1.6.1)
     execjs (2.7.0)
     ffi (1.9.18)
+    gdk_pixbuf2 (3.1.6)
+      gio2 (= 3.1.6)
+    gio2 (3.1.6)
+      glib2 (= 3.1.6)
+      gobject-introspection (= 3.1.6)
+    glib2 (3.1.6)
+      native-package-installer (>= 1.0.3)
+      pkg-config (>= 1.2.2)
     globalid (0.4.0)
       activesupport (>= 4.2.0)
+    gobject-introspection (3.1.6)
+      glib2 (= 3.1.6)
     i18n (0.8.4)
     jbuilder (2.7.0)
       activesupport (>= 4.2.0)
@@ -100,10 +129,15 @@ GEM
     mini_portile2 (2.2.0)
     minitest (5.10.2)
     multi_json (1.12.1)
+    native-package-installer (1.0.4)
     nio4r (2.1.0)
     nokogiri (1.8.0)
       mini_portile2 (~> 2.2.0)
+    pkg-config (1.2.3)
     popper_js (1.9.9)
+    poppler (3.1.6)
+      cairo (>= 1.14.0)
+      gdk_pixbuf2 (= 3.1.6)
     public_suffix (2.0.5)
     puma (3.9.1)
     rack (2.0.3)
@@ -136,6 +170,9 @@ GEM
     rb-fsevent (0.10.2)
     rb-inotify (0.9.10)
       ffi (>= 0.5.0, < 2)
+    roo (2.7.1)
+      nokogiri (~> 1)
+      rubyzip (~> 1.1, < 2.0.0)
     ruby_dep (1.5.0)
     rubyzip (1.2.1)
     sass (3.4.24)
@@ -188,6 +225,11 @@ DEPENDENCIES
   bootstrap!
   byebug
   capybara (~> 2.13)
+  chupa-text!
+  chupa-text-decomposer-html
+  chupa-text-decomposer-libreoffice
+  chupa-text-decomposer-pdf
+  chupa-text-decomposer-spreadsheet
   coffee-rails (~> 4.2)
   jbuilder (~> 2.5)
   jquery-rails

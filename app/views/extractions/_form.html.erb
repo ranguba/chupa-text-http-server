@@ -1,0 +1,22 @@
+<%= form_with(model: extraction, local: true, url: extraction_path, method: :post) do |form| %>
+  <% if extraction.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(extraction.errors.count, "error") %> prohibited this extraction from being saved:</h2>
+
+      <ul>
+      <% extraction.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :input %>
+    <%= form.file_field :input, id: :extraction_input, name: :input %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit "Extract" %>
+  </div>
+<% end %>

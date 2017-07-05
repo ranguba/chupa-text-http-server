@@ -1,0 +1,1 @@
+ChupaText::Decomposers.load

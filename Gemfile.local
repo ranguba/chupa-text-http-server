@@ -1,0 +1,4 @@
+gem 'chupa-text-decomposer-html'
+gem 'chupa-text-decomposer-pdf'
+gem 'chupa-text-decomposer-spreadsheet'
+gem 'chupa-text-decomposer-libreoffice'
