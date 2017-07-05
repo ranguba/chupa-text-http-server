@@ -1,6 +1,6 @@
 class ExtractionsController < ApplicationController
-  # GET /extractions/new
-  def new
+  # GET /extractions/show
+  def show
     @extraction = Extraction.new
   end
 
