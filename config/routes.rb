@@ -3,5 +3,5 @@ Rails.application.routes.draw do
 
   resource :extraction, only: [:show, :create]
 
-  root to: redirect("/extractions")
+  root to: redirect("/extraction")
 end
