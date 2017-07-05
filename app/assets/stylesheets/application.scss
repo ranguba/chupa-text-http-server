@@ -1,1 +1,33 @@
 @import "bootstrap";
+
+nav {
+  @extend .navbar;
+  @extend .navbar-light;
+  @extend .bg-faded;
+
+  a:first-child {
+    @extend .navbar-brand;
+  }
+}
+
+form {
+  .field {
+    @extend .form-group;
+
+    label {
+    }
+
+    input[type=file] {
+      @extend .form-control-file;
+    }
+  }
+
+  .actions {
+    @extend .form-group;
+
+    input[type=submit] {
+      @extend .btn;
+      @extend .btn-primary;
+    }
+  }
+}
