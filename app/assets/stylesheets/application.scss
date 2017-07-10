@@ -3,7 +3,7 @@
 nav {
   @extend .navbar;
   @extend .navbar-light;
-  @extend .bg-faded;
+  @extend .bg-light;
 
   a:first-child {
     @extend .navbar-brand;
