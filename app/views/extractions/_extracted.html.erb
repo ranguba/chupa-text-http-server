@@ -3,7 +3,7 @@
   <table>
   <% @extracted.each do |key, value| -%>
     <% next if key == "texts" -%>
-    <tr>
+    <tr class="metadata-<%= key %>">
       <th scope="row"><%= key %></th>
       <td><%= value %></td>
     </tr>
@@ -15,12 +15,12 @@
   <section class="text">
     <h2>Text #<%= i + 1 %></h2>
     <%= format_screenshot(text["screenshot"]) %>
-    <pre><%= text["body"] %></pre>
+    <pre class="body"><%= text["body"] %></pre>
     <table>
       <% text.each do |key, value| -%>
         <% next if key == "body" -%>
         <% next if key == "screenshot" -%>
-        <tr>
+        <tr class="metadata-<%= key %>">
           <th scope="row"><%= key %></th>
           <td><%= value %></td>
         </tr>
