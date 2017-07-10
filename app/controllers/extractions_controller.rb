@@ -11,8 +11,9 @@ class ExtractionsController < ApplicationController
 
     respond_to do |format|
       if @extraction.valid?
+        @extracted = @extraction.extract
         format.html { render :create }
-        format.json { render json: @extraction.extract }
+        format.json { render json: @extract }
       else
         format.html { render :show }
         format.json { render json: @extraction.errors, status: :unprocessable_entity }

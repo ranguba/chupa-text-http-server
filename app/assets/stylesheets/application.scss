@@ -35,3 +35,26 @@ form {
     }
   }
 }
+
+table {
+  @extend .table;
+  @extend .table-bordered;
+  @extend .table-striped;
+  @extend .table-hover;
+  @extend .table-responsive;
+}
+
+section.text {
+  img {
+    float: left;
+    margin-right: 10px;
+  }
+
+  pre {
+    white-space: pre-wrap;
+  }
+
+  table {
+    clear: both;
+  }
+}

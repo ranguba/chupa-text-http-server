@@ -2,4 +2,4 @@
 
 <%= render 'form', extraction: @extraction %>
 
-<pre><code><%= JSON.pretty_generate(@extraction.extract) %></code></pre>
+<%= render 'extracted', extracted: @extracted %>

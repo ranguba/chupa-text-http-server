@@ -1,0 +1,30 @@
+<section class="metadata">
+  <h2>Metadata</h2>
+  <table>
+  <% @extracted.each do |key, value| -%>
+    <% next if key == "texts" -%>
+    <tr>
+      <th scope="row"><%= key %></th>
+      <td><%= value %></td>
+    </tr>
+  <% end -%>
+  </table>
+</section>
+
+<% (@extracted["texts"] || []).each_with_index do |text, i| -%>
+  <section class="text">
+    <h2>Text #<%= i + 1 %></h2>
+    <%= format_screenshot(text["screenshot"]) %>
+    <pre><%= text["body"] %></pre>
+    <table>
+      <% text.each do |key, value| -%>
+        <% next if key == "body" -%>
+        <% next if key == "screenshot" -%>
+        <tr>
+          <th scope="row"><%= key %></th>
+          <td><%= value %></td>
+        </tr>
+      <% end -%>
+    </table>
+  </section>
+<% end -%>
