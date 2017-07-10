@@ -12,8 +12,13 @@
   <% end %>
 
   <div class="field">
-    <%= form.label :input %>
-    <%= form.file_field :input, id: :extraction_input, name: :input %>
+    <%= form.label :data %>
+    <%= form.file_field :data, id: :extraction_data, name: :data %>
+  </div>
+
+  <div class="field">
+    <%= form.label :uri, "URI (optional)" %>
+    <%= form.text_field :uri, id: :extraction_uri, name: :uri %>
   </div>
 
   <div class="actions">

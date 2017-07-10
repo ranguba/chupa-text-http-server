@@ -20,6 +20,10 @@ form {
     input[type=file] {
       @extend .form-control-file;
     }
+
+    input[type=text] {
+      @extend .form-control;
+    }
   }
 
   .actions {

@@ -14,7 +14,7 @@ class ExtractionsController < ApplicationController
         format.html { render :create }
         format.json { render json: @extraction.extract }
       else
-        format.html { render :new }
+        format.html { render :show }
         format.json { render json: @extraction.errors, status: :unprocessable_entity }
       end
     end
@@ -23,6 +23,8 @@ class ExtractionsController < ApplicationController
   private
     # Never trust parameters from the scary internet, only allow the white list through.
     def extraction_params
-      params.permit(:input)
+      params
+        .except(:format, :utf8, :authenticity_token, :commit)
+        .permit(:data, :uri)
     end
 end
