@@ -160,5 +160,101 @@ class ExtractionsControllerTest < ActionDispatch::IntegrationTest
   end
 
   sub_test_case "API" do
+    sub_test_case "data" do
+      def assert_extract(expected, fixture_name)
+        post(extraction_url(format: "json"),
+             params: {
+               data: fixture_file_upload(file_fixture(fixture_name)),
+             })
+        assert_equal("application/json", response.content_type,
+                     response.body)
+        extracted = JSON.parse(response.body)["texts"].collect do |text|
+          [text["title"], text["body"]]
+        end
+        assert_equal(expected, extracted)
+      end
+
+      test "HTML" do
+        assert_extract([["Hello", "World!"]], "hello.html")
+      end
+
+      test "OpenDocument Text" do
+        assert_extract([["Hello", "World!\n"]], "hello.odt")
+      end
+
+      test "Word: old" do
+        assert_extract([["Hello", "World!\n"]], "hello.doc")
+      end
+
+      test "Word" do
+        assert_extract([["Hello", "World!\n"]], "hello.docx")
+      end
+
+      test "OpenDocument Spreadsheet" do
+        assert_extract([
+                         [
+                           "Hello",
+                           "Sheet1 A1\nSheet1 A2\nSheet1 B1\n" +
+                           "Sheet2 A1\nSheet2 A2\nSheet2 B1\n",
+                         ],
+                       ],
+                       "hello.ods")
+      end
+
+      test "Excel: old" do
+        assert_extract([
+                         [
+                           "Hello",
+                           "Sheet1 A1\nSheet1 A2\nSheet1 B1\n" +
+                           "Sheet2 A1\nSheet2 A2\nSheet2 B1\n",
+                         ],
+                       ],
+                       "hello.xls")
+      end
+
+      test "Excel" do
+        assert_extract([
+                         [
+                           "Hello",
+                           "Sheet1 A1\nSheet1 A2\nSheet1 B1\n" +
+                           "Sheet2 A1\nSheet2 A2\nSheet2 B1\n",
+                         ],
+                       ],
+                       "hello.xlsx")
+      end
+
+      test "OpenDocument Presentation" do
+        assert_extract([
+                         [
+                           "Hello",
+                           "Page1 Title\nPage1 Content\n" +
+                           "Page2 Title\nPage2 Content\n",
+                         ]
+                       ],
+                       "hello.odp")
+      end
+
+      test "PowerPoint: old" do
+        assert_extract([
+                         [
+                           "Hello",
+                           "Page1 Title\nPage1 Content\n" +
+                           "Page2 Title\nPage2 Content\n",
+                         ]
+                       ],
+                       "hello.ppt")
+      end
+
+      test "PowerPoint" do
+        assert_extract([
+                         [
+                           "Hello",
+                           "Page1 Title\nPage1 Content\n" +
+                           "Page2 Title\nPage2 Content\n",
+                         ]
+                       ],
+                       "hello.pptx")
+      end
+    end
   end
 end
