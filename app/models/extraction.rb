@@ -15,6 +15,8 @@ class Extraction
   end
 
   def extract
+    return nil unless valid?
+
     extractor = ChupaText::Extractor.new
     configuration = ChupaText::Configuration.new
     configuration_loader = ChupaText::ConfigurationLoader.new(configuration)
@@ -29,12 +31,25 @@ class Extraction
       end
       data = ChupaText::VirtualFileData.new(data_uri, @data.to_io)
     else
-      data = ChupaText::InputData.new(@uri)
+      begin
+        data = ChupaText::InputData.new(@uri)
+      rescue ChupaText::DownloadError => error
+        errors.add(:uri, :invalid, message: error.message)
+        return nil
+      rescue => error
+        errors.add(:uri, :invalid, message: "#{error.class}: #{error.message}")
+        return nil
+      end
     end
     formatter = ChupaText::Formatters::Hash.new
     formatter.format_start(data)
-    extractor.extract(data) do |extracted|
-      formatter.format_extracted(extracted)
+    begin
+      extractor.extract(data) do |extracted|
+        formatter.format_extracted(extracted)
+      end
+    rescue ChupaText::Error => error
+      errors.add(:data, :invalid, message: error.message)
+      return nil
     end
     formatter.format_finish(data)
   end

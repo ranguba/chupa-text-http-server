@@ -4,7 +4,7 @@ class ExtractionsControllerTest < ActionDispatch::IntegrationTest
   setup do
   end
 
-  def run_http_server(content_type: nil, body: nil)
+  def run_http_server(content_type: nil, body: nil, status: nil)
     config = {
       :Port => 0,
       :Logger => Rails.logger,
@@ -13,16 +13,18 @@ class ExtractionsControllerTest < ActionDispatch::IntegrationTest
       ],
     }
     server = WEBrick::HTTPServer.new(config)
-    server.mount_proc("/") do |request, response|
+    path = "/data"
+    server.mount_proc(path) do |request, response|
       response.content_type = content_type
       response.body = body
+      response.status = status if status
     end
     server_thread = Thread.new do
       server.start
     end
     begin
       port = server[:Port]
-      yield("http://127.0.0.1:#{port}/")
+      yield("http://127.0.0.1:#{port}#{path}")
     ensure
       server.shutdown
       server_thread.join
@@ -173,6 +175,46 @@ class ExtractionsControllerTest < ActionDispatch::IntegrationTest
             text["body"]
           end
           assert_equal(["Hello"], extracted)
+        end
+      end
+
+      test "not found" do
+        run_http_server(content_type: "text/plain", body: "Hello") do |uri|
+          nonexistent_uri = URI.parse(uri)
+          nonexistent_uri.path = "/nonexistent"
+          post(extraction_url(format: "json"),
+               params: {
+                 uri: nonexistent_uri.to_s,
+               })
+          assert_response(:unprocessable_entity)
+          assert_equal("application/json", response.content_type,
+                       response.body)
+          assert_equal({
+                         "uri" => [
+                           "Download error: <#{nonexistent_uri}>: 404 Not Found",
+                         ],
+                       },
+                       JSON.parse(response.body))
+        end
+      end
+
+      test "internal server error" do
+        run_http_server(content_type: "text/plain",
+                        body: "Error",
+                        status: 500) do |uri|
+          post(extraction_url(format: "json"),
+               params: {
+                 uri: uri,
+               })
+          assert_response(:unprocessable_entity)
+          assert_equal("application/json", response.content_type,
+                       response.body)
+          assert_equal({
+                         "uri" => [
+                           "Download error: <#{uri}>: 500 Internal Server Error",
+                         ],
+                       },
+                       JSON.parse(response.body))
         end
       end
     end
