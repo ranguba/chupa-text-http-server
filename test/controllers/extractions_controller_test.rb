@@ -160,6 +160,23 @@ class ExtractionsControllerTest < ActionDispatch::IntegrationTest
   end
 
   sub_test_case "API" do
+    sub_test_case "URI" do
+      test "success" do
+        run_http_server(content_type: "text/plain", body: "Hello") do |uri|
+          post(extraction_url(format: "json"),
+               params: {
+                 uri: uri,
+               })
+          assert_equal("application/json", response.content_type,
+                       response.body)
+          extracted = JSON.parse(response.body)["texts"].collect do |text|
+            text["body"]
+          end
+          assert_equal(["Hello"], extracted)
+        end
+      end
+    end
+
     sub_test_case "data" do
       def assert_extract(expected, fixture_name)
         post(extraction_url(format: "json"),
