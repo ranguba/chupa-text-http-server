@@ -116,10 +116,16 @@ class ExtractionsControllerTest < ActionDispatch::IntegrationTest
 
         test "Excel" do
           assert_extract([
+                           ["Hello", ""],
                            [
-                             "Hello",
-                             "Sheet1 A1 Sheet1 A2 Sheet1 B1 " +
-                             "Sheet2 A1 Sheet2 A2 Sheet2 B1",
+                             nil,
+                             "Sheet1 A1\tSheet1 B1\n" +
+                             "Sheet1 A2\n",
+                           ],
+                           [
+                             nil,
+                             "Sheet2 A1\tSheet2 B1\n" +
+                             "Sheet2 A2\n",
                            ],
                          ],
                          "hello.xlsx")
@@ -273,10 +279,16 @@ class ExtractionsControllerTest < ActionDispatch::IntegrationTest
 
       test "Excel" do
         assert_extract([
+                         ["Hello", ""],
                          [
-                           "Hello",
-                           "Sheet1 A1\nSheet1 A2\nSheet1 B1\n" +
-                           "Sheet2 A1\nSheet2 A2\nSheet2 B1\n",
+                           nil,
+                           "Sheet1 A1\tSheet1 B1\n" +
+                           "Sheet1 A2\n",
+                         ],
+                         [
+                           nil,
+                           "Sheet2 A1\tSheet2 B1\n" +
+                           "Sheet2 A2\n",
                          ],
                        ],
                        "hello.xlsx")
