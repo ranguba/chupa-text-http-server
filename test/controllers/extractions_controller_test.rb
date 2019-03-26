@@ -63,105 +63,152 @@ class ExtractionsControllerTest < ActionDispatch::IntegrationTest
       end
 
       sub_test_case "data" do
-        def assert_extract(expected, fixture_name)
+        def extract(fixture_name)
           visit(extraction_url)
           attach_file("Data", file_fixture(fixture_name))
           click_button("Extract")
-          extracted = all(".text").collect do |node|
+          all(".text").collect do |node|
+            if block_given?
+              yield(node)
+            else
+              [
+                node.find_all(".metadata-title td").first&.text,
+                node.find(".body").text,
+              ]
+            end
+          end
+        end
+
+        def extract_spreadsheet(fixture_name)
+          extract(fixture_name) do |node|
             [
-              node.find(".metadata-title td").text,
+              node.find_all(".metadata-title td").first&.text,
+              node.find_all(".metadata-name td").first&.text,
               node.find(".body").text,
             ]
           end
-          assert_equal(expected, extracted)
         end
 
         test "HTML" do
-          assert_extract([["Hello", "World!"]], "hello.html")
+          assert_equal([["Hello", "World!"]],
+                       extract("hello.html"))
         end
 
         test "OpenDocument Text" do
-          assert_extract([["Hello", "World!"]], "hello.odt")
+          assert_equal([["Hello", "World!"]],
+                       extract("hello.odt"))
         end
 
         test "Word: old" do
-          assert_extract([["Hello", "World!"]], "hello.doc")
+          assert_equal([["Hello", "World!"]],
+                       extract("hello.doc"))
         end
 
         test "Word" do
-          assert_extract([["Hello", "World!"]], "hello.docx")
+          assert_equal([["Hello", "World!"]],
+                       extract("hello.docx"))
         end
 
         test "OpenDocument Spreadsheet" do
-          assert_extract([
-                           [
-                             "Hello",
-                             "Sheet1 A1 Sheet1 A2 Sheet1 B1 " +
-                             "Sheet2 A1 Sheet2 A2 Sheet2 B1",
-                           ],
+          assert_equal([
+                         [
+                           "Hello", nil, "",
                          ],
-                         "hello.ods")
+                         [
+                           nil,
+                           "Sheet1",
+                           "Sheet1 A1 Sheet1 B1 " +
+                           "Sheet1 A2",
+                         ],
+                         [
+                           nil,
+                           "Sheet2",
+                           "Sheet2 A1 Sheet2 B1 " +
+                           "Sheet2 A2",
+                         ],
+                       ],
+                       extract_spreadsheet("hello.ods"))
         end
 
         test "Excel: old" do
-          assert_extract([
-                           [
-                             "Hello",
-                             "Sheet1 A1 Sheet1 A2 Sheet1 B1 " +
-                             "Sheet2 A1 Sheet2 A2 Sheet2 B1",
-                           ],
+          assert_equal([
+                         [
+                           "Hello",
+                           "Sheet1 A1 Sheet1 A2 Sheet1 B1 " +
+                           "Sheet2 A1 Sheet2 A2 Sheet2 B1",
                          ],
-                         "hello.xls")
+                       ],
+                       extract("hello.xls"))
         end
 
         test "Excel" do
-          assert_extract([
-                           ["Hello", ""],
-                           [
-                             nil,
-                             "Sheet1 A1\tSheet1 B1\n" +
-                             "Sheet1 A2\n",
-                           ],
-                           [
-                             nil,
-                             "Sheet2 A1\tSheet2 B1\n" +
-                             "Sheet2 A2\n",
-                           ],
+          assert_equal([
+                         ["Hello", nil, ""],
+                         [
+                           nil,
+                           "Sheet1",
+                           "Sheet1 A1 Sheet1 B1 " +
+                           "Sheet1 A2",
                          ],
-                         "hello.xlsx")
+                         [
+                           nil,
+                           "Sheet2",
+                           "Sheet2 A1 Sheet2 B1 " +
+                           "Sheet2 A2",
+                         ],
+                       ],
+                       extract_spreadsheet("hello.xlsx"))
         end
 
         test "OpenDocument Presentation" do
-          assert_extract([
-                           [
-                             "Hello",
-                             "Page1 Title Page1 Content " +
-                             "Page2 Title Page2 Content",
-                           ]
+          assert_equal([
+                         [
+                           "Hello",
+                           "",
                          ],
-                         "hello.odp")
+                         [
+                           nil,
+                           "Page1 Title " +
+                           "Page1 Content",
+                         ],
+                         [
+                           nil,
+                           "Page2 Title " +
+                           "Page2 Content",
+                         ],
+                       ],
+                       extract("hello.odp"))
         end
 
         test "PowerPoint: old" do
-          assert_extract([
-                           [
-                             "Hello",
-                             "Page1 Title Page1 Content " +
-                             "Page2 Title Page2 Content",
-                           ]
-                         ],
-                         "hello.ppt")
+          assert_equal([
+                         [
+                           "Hello",
+                           "Page1 Title Page1 Content " +
+                           "Page2 Title Page2 Content",
+                         ]
+                       ],
+                       extract("hello.ppt"))
         end
 
         test "PowerPoint" do
-          assert_extract([
-                           [
-                             "Hello",
-                             "Page1 Title Page1 Content " +
-                             "Page2 Title Page2 Content",
-                           ]
+          assert_equal([
+                         [
+                           "Hello",
+                           "",
                          ],
-                         "hello.pptx")
+                         [
+                           nil,
+                           "Page1 Title " +
+                           "Page1 Content",
+                         ],
+                         [
+                           nil,
+                           "Page2 Title " +
+                           "Page2 Content",
+                         ],
+                       ],
+                       extract("hello.pptx"))
         end
       end
     end
@@ -226,105 +273,157 @@ class ExtractionsControllerTest < ActionDispatch::IntegrationTest
     end
 
     sub_test_case "data" do
-      def assert_extract(expected, fixture_name)
+      def extract(fixture_name)
         post(extraction_url(format: "json"),
              params: {
                data: fixture_file_upload(file_fixture(fixture_name)),
              })
         assert_equal("application/json", response.content_type,
                      response.body)
-        extracted = JSON.parse(response.body)["texts"].collect do |text|
-          [text["title"], text["body"]]
+        JSON.parse(response.body)["texts"].collect do |text|
+          if block_given?
+            yield(text)
+          else
+            [
+              text["title"],
+              text["body"],
+            ]
+          end
         end
-        assert_equal(expected, extracted)
+      end
+
+      def extract_spreadsheet(fixture_name)
+        extract(fixture_name) do |text|
+          [
+            text["title"],
+            text["name"],
+            text["body"],
+          ]
+        end
       end
 
       test "HTML" do
-        assert_extract([["Hello", "World!"]], "hello.html")
+        assert_equal([["Hello", "World!"]],
+                     extract("hello.html"))
       end
 
       test "OpenDocument Text" do
-        assert_extract([["Hello", "World!\n"]], "hello.odt")
+        assert_equal([["Hello", "World!\n"]],
+                     extract("hello.odt"))
       end
 
       test "Word: old" do
-        assert_extract([["Hello", "World!\n"]], "hello.doc")
+        assert_equal([["Hello", "World!\n"]],
+                     extract("hello.doc"))
       end
 
       test "Word" do
-        assert_extract([["Hello", "World!\n"]], "hello.docx")
+        assert_equal([["Hello", "World!\n"]],
+                     extract("hello.docx"))
       end
 
       test "OpenDocument Spreadsheet" do
-        assert_extract([
-                         [
-                           "Hello",
-                           "Sheet1 A1\nSheet1 A2\nSheet1 B1\n" +
-                           "Sheet2 A1\nSheet2 A2\nSheet2 B1\n",
-                         ],
+        assert_equal([
+                       [
+                         "Hello",
+                         nil,
+                         "",
                        ],
-                       "hello.ods")
+                       [
+                         nil,
+                         "Sheet1",
+                         "Sheet1 A1\tSheet1 B1\n" +
+                         "Sheet1 A2\t\n",
+                       ],
+                       [
+                         nil,
+                         "Sheet2",
+                         "Sheet2 A1\tSheet2 B1\n" +
+                         "Sheet2 A2\t\n",
+                       ],
+                     ],
+                     extract_spreadsheet("hello.ods"))
       end
 
       test "Excel: old" do
-        assert_extract([
-                         [
-                           "Hello",
-                           "Sheet1 A1\nSheet1 A2\nSheet1 B1\n" +
-                           "Sheet2 A1\nSheet2 A2\nSheet2 B1\n",
-                         ],
+        assert_equal([
+                       [
+                         "Hello",
+                         "Sheet1 A1\nSheet1 A2\nSheet1 B1\n" +
+                         "Sheet2 A1\nSheet2 A2\nSheet2 B1\n",
                        ],
-                       "hello.xls")
+                     ],
+                     extract("hello.xls"))
       end
 
       test "Excel" do
-        assert_extract([
-                         ["Hello", ""],
-                         [
-                           nil,
-                           "Sheet1 A1\tSheet1 B1\n" +
-                           "Sheet1 A2\n",
-                         ],
-                         [
-                           nil,
-                           "Sheet2 A1\tSheet2 B1\n" +
-                           "Sheet2 A2\n",
-                         ],
+        assert_equal([
+                       ["Hello", nil, ""],
+                       [
+                         nil,
+                         "Sheet1",
+                         "Sheet1 A1\tSheet1 B1\n" +
+                         "Sheet1 A2\n",
                        ],
-                       "hello.xlsx")
+                       [
+                         nil,
+                         "Sheet2",
+                         "Sheet2 A1\tSheet2 B1\n" +
+                         "Sheet2 A2\n",
+                       ],
+                     ],
+                     extract_spreadsheet("hello.xlsx"))
       end
 
       test "OpenDocument Presentation" do
-        assert_extract([
-                         [
-                           "Hello",
-                           "Page1 Title\nPage1 Content\n" +
-                           "Page2 Title\nPage2 Content\n",
-                         ]
+        assert_equal([
+                       [
+                         "Hello",
+                         "",
                        ],
-                       "hello.odp")
+                       [
+                         nil,
+                         "Page1 Title\n" +
+                         "Page1 Content\n",
+                       ],
+                       [
+                         nil,
+                         "Page2 Title\n" +
+                         "Page2 Content\n",
+                       ],
+                     ],
+                     extract("hello.odp"))
       end
 
       test "PowerPoint: old" do
-        assert_extract([
-                         [
-                           "Hello",
-                           "Page1 Title\nPage1 Content\n" +
-                           "Page2 Title\nPage2 Content\n",
-                         ]
-                       ],
-                       "hello.ppt")
+        assert_equal([
+                       [
+                         "Hello",
+                         "Page1 Title\nPage1 Content\n" +
+                         "Page2 Title\nPage2 Content\n",
+                       ]
+                     ],
+                     extract("hello.ppt"))
       end
 
       test "PowerPoint" do
-        assert_extract([
-                         [
-                           "Hello",
-                           "Page1 Title\nPage1 Content\n" +
-                           "Page2 Title\nPage2 Content\n",
-                         ]
+        assert_equal([
+                       [
+                         "Hello",
+                         "",
                        ],
-                       "hello.pptx")
+                       [
+                         nil,
+                         "Page1 Title\n" +
+                         "Page1 Content\n",
+                       ],
+                       [
+                         nil,
+                         "Page2 Title\n" +
+                         "Page2 Content\n",
+                       ],
+                     ],
+                     extract("hello.pptx"))
       end
     end
   end
