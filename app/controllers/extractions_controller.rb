@@ -26,8 +26,14 @@ class ExtractionsController < ApplicationController
   private
     # Never trust parameters from the scary internet, only allow the white list through.
     def extraction_params
-      params
-        .except(:format, :utf8, :authenticity_token, :commit)
-        .permit(:data, :uri)
+      if params[:extraction]
+        # For form
+        params.require(:extraction).permit(:data, :uri)
+      else
+        # For API
+        params
+          .except(:format, :utf8, :authenticity_token, :commit)
+          .permit(:data, :uri)
+      end
     end
 end

@@ -9,6 +9,10 @@ rvm:
 
 dist: xenial
 
+addons:
+  apt:
+    update: true
+
 before_install:
   - ln -s Gemfile.local{.example,}
 

@@ -1,4 +1,7 @@
-<%= form_with(model: extraction, local: true, url: extraction_path, method: :post) do |form| %>
+<%= form_with(model: extraction,
+              local: true,
+              url: extraction_path,
+              method: :post) do |form| %>
   <% if extraction.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(extraction.errors.count, "error") %> prohibited this extraction from being saved:</h2>
@@ -13,12 +16,12 @@
 
   <div class="field">
     <%= form.label :data %>
-    <%= form.file_field :data, id: :extraction_data, name: :data %>
+    <%= form.file_field :data %>
   </div>
 
   <div class="field">
     <%= form.label :uri, "URI (optional)" %>
-    <%= form.text_field :uri, id: :extraction_uri, name: :uri %>
+    <%= form.text_field :uri %>
   </div>
 
   <div class="actions">
