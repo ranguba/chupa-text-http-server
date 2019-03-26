@@ -3,5 +3,7 @@
 gem "chupa-text-decomposer-html"
 gem "chupa-text-decomposer-pdf"
 gem "chupa-text-decomposer-spreadsheet"
-gem "chupa-text-decomposer-libreoffice"
+gem "chupa-text-decomposer-libreoffice-excel"
+gem "chupa-text-decomposer-libreoffice-powerpoint"
+gem "chupa-text-decomposer-libreoffice-word"
 gem "chupa-text-decomposer-webkit"
