@@ -12,6 +12,8 @@ dist: xenial
 addons:
   apt:
     update: true
+    packages:
+      - libreoffice
 
 before_install:
   - ln -s Gemfile.local{.example,}
