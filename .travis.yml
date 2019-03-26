@@ -9,5 +9,8 @@ rvm:
 
 dist: xenial
 
+before_install:
+  - ln -s Gemfile.local{.example,}
+
 script:
   - bin/rails test
