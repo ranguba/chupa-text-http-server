@@ -28,12 +28,16 @@ class ExtractionsController < ApplicationController
     def extraction_params
       if params[:extraction]
         # For form
-        params.require(:extraction).permit(:data, :uri)
+        base_params = params.require(:extraction)
       else
         # For API
-        params
-          .except(:format, :utf8, :authenticity_token, :commit)
-          .permit(:data, :uri)
+        base_params = params.except(:format, :utf8, :authenticity_token, :commit)
       end
+      base_params.permit(:data,
+                         :uri,
+                         :timeout,
+                         :limit_cpu,
+                         :limit_as,
+                         :max_body_size)
     end
 end
