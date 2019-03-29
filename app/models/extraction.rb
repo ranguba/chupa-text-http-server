@@ -13,6 +13,22 @@ class Extraction
             numericality: {only_integer: true},
             allow_nil: true
 
+  class << self
+    def extractor
+      @extractor ||= build_extractor
+    end
+
+    private
+    def build_extractor
+      extractor = ChupaText::Extractor.new
+      configuration = ChupaText::Configuration.new
+      configuration_loader = ChupaText::ConfigurationLoader.new(configuration)
+      configuration_loader.load(Rails.root + "config" + "chupa-text.rb")
+      extractor.apply_configuration(configuration)
+      extractor
+    end
+  end
+
   def initialize(attributes={})
     @data = nil
     @uri = nil
@@ -44,12 +60,7 @@ class Extraction
   def extract
     return nil unless valid?
 
-    extractor = ChupaText::Extractor.new
-    configuration = ChupaText::Configuration.new
-    configuration_loader = ChupaText::ConfigurationLoader.new(configuration)
-    configuration_loader.load(Rails.root + "config" + "chupa-text.rb")
-    extractor.apply_configuration(configuration)
-
+    extractor = self.class.extractor
     if @data
       data_uri = @uri
       data_uri = nil if data_uri.blank?
