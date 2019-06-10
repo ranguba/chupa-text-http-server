@@ -61,6 +61,32 @@ class Extraction
     return nil unless valid?
 
     extractor = self.class.extractor
+    create_data do |data|
+      formatter = ChupaText::Formatters::Hash.new
+      formatter.format_start(data)
+      max = data.max_body_size
+      size = 0
+      begin
+        extractor.extract(data) do |extracted|
+          formatter.format_extracted(extracted)
+          body = extracted.body
+          extracted.release
+          if max and body
+            size += body.bytesize
+            break if size >= max
+          end
+        end
+      rescue ChupaText::Error => error
+        errors.add(:data, :invalid, message: error.message)
+        return nil
+      end
+      formatter.format_finish(data)
+    end
+  end
+
+  private
+  def create_data
+    data = nil
     if @data
       data_uri = @uri
       data_uri = nil if data_uri.blank?
@@ -69,11 +95,9 @@ class Extraction
       end
       data = ChupaText::VirtualFileData.new(data_uri, @data.to_io)
       data.mime_type = @data.content_type if @data.content_type
-      setup_data(data)
     else
       begin
         data = ChupaText::InputData.new(@uri)
-        setup_data(data)
       rescue ChupaText::DownloadError => error
         errors.add(:uri, :invalid, message: error.message)
         return nil
@@ -82,27 +106,14 @@ class Extraction
         return nil
       end
     end
-    formatter = ChupaText::Formatters::Hash.new
-    formatter.format_start(data)
-    max = data.max_body_size
-    size = 0
     begin
-      extractor.extract(data) do |extracted|
-        formatter.format_extracted(extracted)
-        body = extracted.body
-        if max and body
-          size += body.bytesize
-          break if size >= max
-        end
-      end
-    rescue ChupaText::Error => error
-      errors.add(:data, :invalid, message: error.message)
-      return nil
+      setup_data(data)
+      yield(data)
+    ensure
+      data.release
     end
-    formatter.format_finish(data)
   end
 
-  private
   def setup_data(data)
     data.max_body_size = max_body_size
     data.timeout = @timeout
