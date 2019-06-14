@@ -457,11 +457,10 @@ class ExtractionsControllerTest < ActionDispatch::IntegrationTest
         assert_equal("application/json", response.content_type,
                      response.body)
         top_dir = File.expand_path("../../", __dir__)
+        uri = URI.parse("file://#{top_dir}/#{path}")
         assert_equal({
                        "data" => [
-                         "Timeout error: " +
-                         "<file://#{top_dir}/#{path}>(): " +
-                         "<#{timeout}>",
+                         "Timeout error: <#{uri}>(): <#{timeout}>",
                        ],
                      },
                      JSON.parse(response.body))
