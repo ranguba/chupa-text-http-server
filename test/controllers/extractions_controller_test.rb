@@ -426,5 +426,46 @@ class ExtractionsControllerTest < ActionDispatch::IntegrationTest
                      extract("hello.pptx"))
       end
     end
+
+    sub_test_case "options" do
+      test "timeout" do
+        class UnknownDecomposer < ChupaText::Decomposer
+          def target?(data)
+            data.extension == "unknown"
+          end
+
+          def decompose(data)
+            extracted = ChupaText::Data.new
+            extracted.mime_type = "text/plain"
+            extracted.body = data.body.gsub(/<.+?>/, "")
+            timeout_value = ChupaText::TimeoutValue.new("[decomposer]",
+                                                        data.timeout)
+            timeout = timeout_value.raw
+            sleep(timeout * 2) if timeout
+            yield(extracted)
+          end
+        end
+
+        Extraction.extractor.add_decomposer(UnknownDecomposer.new({}))
+        path = "hello.unknown"
+        timeout = "0.001"
+        post(extraction_url(format: "json"),
+             params: {
+               data: fixture_file_upload(file_fixture(path)),
+               timeout: timeout,
+             })
+        assert_equal("application/json", response.content_type,
+                     response.body)
+        top_dir = File.expand_path("../../", __dir__)
+        assert_equal({
+                       "data" => [
+                         "Timeout error: " +
+                         "<file://#{top_dir}/#{path}>(): " +
+                         "<#{timeout}>",
+                       ],
+                     },
+                     JSON.parse(response.body))
+      end
+    end
   end
 end

@@ -62,7 +62,7 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 gem 'bootstrap'
 gem 'jquery-rails'
 
-gem 'chupa-text', '>= 1.2.8'#, path: '../chupa-text'
+gem 'chupa-text', '>= 1.3.0'#, path: '../chupa-text'
 local_gemfile = "#{__dir__}/Gemfile.local"
 if File.exist?(local_gemfile)
   eval(File.read(local_gemfile), binding, local_gemfile, 1)
