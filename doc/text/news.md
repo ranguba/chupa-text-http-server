@@ -1,5 +1,11 @@
 # News
 
+## 1.0.3: 2019-06-14
+
+### Improvements
+
+  * Required chupa-text 1.3.0 or later.
+
 ## 1.0.2: 2019-06-10
 
 ### Improvements
