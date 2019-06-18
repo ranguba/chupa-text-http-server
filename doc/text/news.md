@@ -1,5 +1,11 @@
 # News
 
+## 1.0.3: 2019-06-18
+
+### Improvements
+
+  * Added support for `need_screenshot` parameter.
+
 ## 1.0.3: 2019-06-14
 
 ### Improvements
