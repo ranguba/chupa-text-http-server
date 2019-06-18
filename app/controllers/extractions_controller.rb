@@ -38,6 +38,7 @@ class ExtractionsController < ApplicationController
                          :timeout,
                          :limit_cpu,
                          :limit_as,
-                         :max_body_size)
+                         :max_body_size,
+                         :need_screenshot)
     end
 end

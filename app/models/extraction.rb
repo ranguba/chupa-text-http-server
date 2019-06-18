@@ -7,6 +7,7 @@ class Extraction
   attr_accessor :limit_cpu
   attr_accessor :limit_as
   attr_writer :max_body_size
+  attr_writer :need_screenshot
 
   validates :data, presence: true, if: ->(record) {record.uri.blank?}
   validates :max_body_size,
@@ -36,6 +37,7 @@ class Extraction
     @limit_cpu = nil
     @limit_as = nil
     @max_body_size = nil
+    @need_screenshot = nil
     super
   end
 
@@ -54,6 +56,15 @@ class Extraction
       nil
     else
       Integer(@max_body_size, 10)
+    end
+  end
+
+  def need_screenshot?
+    case @need_screenshot
+    when "false", false
+      false
+    else
+      true
     end
   end
 
@@ -119,5 +130,6 @@ class Extraction
     data.timeout = @timeout
     data.limit_cpu = @limit_cpu
     data.limit_as = @limit_as
+    data.need_screenshot = need_screenshot?
   end
 end

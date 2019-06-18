@@ -465,6 +465,43 @@ class ExtractionsControllerTest < ActionDispatch::IntegrationTest
                      },
                      JSON.parse(response.body))
       end
+
+      sub_test_case "need_screenshot" do
+        def extract(params={})
+          post(extraction_url(format: "json"),
+               params: {
+                 data: fixture_file_upload(file_fixture("hello.csv")),
+               }.merge(params))
+          assert_equal("application/json", response.content_type,
+                       response.body)
+          JSON.parse(response.body)["texts"].collect do |text|
+            {
+              text: text["body"],
+              have_screenshot: text.key?("screenshot"),
+            }
+          end
+        end
+
+        test "default" do
+          assert_equal([
+                         {
+                           text: "1\t2\n",
+                           have_screenshot: true,
+                         },
+                       ],
+                       extract)
+        end
+
+        test "false" do
+          assert_equal([
+                         {
+                           text: "1\t2\n",
+                           have_screenshot: false,
+                         },
+                       ],
+                       extract(need_screenshot: "false"))
+        end
+      end
     end
   end
 end
