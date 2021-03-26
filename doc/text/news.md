@@ -1,5 +1,11 @@
 # News
 
+## 1.0.6: 2021-03-26
+
+### Improvements
+
+  * Added `mime_type` parameter for text data.
+
 ## 1.0.5: 2021-03-26
 
 ### Improvements
