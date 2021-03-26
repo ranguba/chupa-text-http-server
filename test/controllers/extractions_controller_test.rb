@@ -428,10 +428,11 @@ class ExtractionsControllerTest < ActionDispatch::IntegrationTest
     end
 
     sub_test_case "data: text" do
-      def extract(text)
+      def extract(text, mime_type)
         post(extraction_url(format: "json"),
              params: {
                data: text,
+               mime_type: mime_type,
              })
         assert_equal("application/json", response.content_type,
                      response.body)
@@ -449,7 +450,7 @@ class ExtractionsControllerTest < ActionDispatch::IntegrationTest
 
       test "HTML" do
         assert_equal([["Hello", "World!"]],
-                     extract(<<-HTML))
+                     extract(<<-HTML, "text/html"))
 <html>
   <head>
     <title>Hello</title>

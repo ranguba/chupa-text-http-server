@@ -34,6 +34,7 @@ class ExtractionsController < ApplicationController
         base_params = params.except(:format, :utf8, :authenticity_token, :commit)
       end
       base_params.permit(:data,
+                         :mime_type,
                          :uri,
                          :timeout,
                          :limit_cpu,

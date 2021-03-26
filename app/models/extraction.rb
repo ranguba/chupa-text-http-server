@@ -2,6 +2,7 @@ class Extraction
   include ActiveModel::Model
 
   attr_accessor :data
+  attr_accessor :mime_type
   attr_accessor :uri
   attr_accessor :timeout
   attr_accessor :limit_cpu
@@ -32,6 +33,7 @@ class Extraction
 
   def initialize(attributes={})
     @data = nil
+    @mime_type = nil
     @uri = nil
     @timeout = nil
     @limit_cpu = nil
@@ -101,6 +103,7 @@ class Extraction
     if @data
       if @data.is_a?(String)
         data = ChupaText::TextData.new(@data)
+        data.mime_type = @mime_type
       else
         data_uri = @uri
         data_uri = nil if data_uri.blank?
