@@ -272,7 +272,7 @@ class ExtractionsControllerTest < ActionDispatch::IntegrationTest
       end
     end
 
-    sub_test_case "data" do
+    sub_test_case "data: file" do
       def extract(fixture_name)
         post(extraction_url(format: "json"),
              params: {
@@ -424,6 +424,41 @@ class ExtractionsControllerTest < ActionDispatch::IntegrationTest
                        ],
                      ],
                      extract("hello.pptx"))
+      end
+    end
+
+    sub_test_case "data: text" do
+      def extract(text)
+        post(extraction_url(format: "json"),
+             params: {
+               data: text,
+             })
+        assert_equal("application/json", response.content_type,
+                     response.body)
+        JSON.parse(response.body)["texts"].collect do |text|
+          if block_given?
+            yield(text)
+          else
+            [
+              text["title"],
+              text["body"],
+            ]
+          end
+        end
+      end
+
+      test "HTML" do
+        assert_equal([["Hello", "World!"]],
+                     extract(<<-HTML))
+<html>
+  <head>
+    <title>Hello</title>
+  </head>
+  <body>
+    <p>World!</p>
+  </body>
+</html>
+                     HTML
       end
     end
 

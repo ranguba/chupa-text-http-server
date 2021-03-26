@@ -99,13 +99,17 @@ class Extraction
   def create_data
     data = nil
     if @data
-      data_uri = @uri
-      data_uri = nil if data_uri.blank?
-      if data_uri.nil? and @data.original_filename
-        data_uri = Pathname(@data.original_filename)
+      if @data.is_a?(String)
+        data = ChupaText::TextData.new(@data)
+      else
+        data_uri = @uri
+        data_uri = nil if data_uri.blank?
+        if data_uri.nil? and @data.original_filename
+          data_uri = Pathname(@data.original_filename)
+        end
+        data = ChupaText::VirtualFileData.new(data_uri, @data.to_io)
+        data.mime_type = @data.content_type if @data.content_type
       end
-      data = ChupaText::VirtualFileData.new(data_uri, @data.to_io)
-      data.mime_type = @data.content_type if @data.content_type
     else
       begin
         data = ChupaText::InputData.new(@uri)
