@@ -1,5 +1,11 @@
 # News
 
+## 1.0.5: 2021-03-26
+
+### Improvements
+
+  * Added support for text as `data` parameter.
+
 ## 1.0.4: 2019-06-18
 
 ### Improvements
