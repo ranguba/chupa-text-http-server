@@ -102,10 +102,17 @@ You must specify `data` or `uri` parameter. If you want to extract
 text from local file, you can use `data` parameter. If you want to
 extract text from remote file, you can use `uri` parameter.
 
-If you use `data`, you must send `data` as `multipart/form-data`. You
-can specify `filename` and `content-type` of the data. It's helpful to
-choose correct decomposer. Decomposer is a ChupaText module to extract
-text from the specific data.
+If you use `data`, you must send `data` as `multipart/form-data` or
+`application/x-www-form-urlencoded`.
+
+If you use `multipart/form-data`, you must specify `filename` of the
+data too. You can also specify `content-type` of the data too.
+
+If you use `application/x-www-form-urlencoded`, you must specify
+`mime_type` parameter too. It's MIME type of the data.
+
+Metadata are helpful to choose correct decomposer. Decomposer is a
+ChupaText module to extract text from the specific data.
 
 Here are optional parameters:
 
