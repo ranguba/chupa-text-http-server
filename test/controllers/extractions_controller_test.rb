@@ -222,7 +222,7 @@ class ExtractionsControllerTest < ActionDispatch::IntegrationTest
                params: {
                  uri: uri,
                })
-          assert_equal("application/json", response.content_type,
+          assert_equal("application/json", response.media_type,
                        response.body)
           extracted = JSON.parse(response.body)["texts"].collect do |text|
             text["body"]
@@ -240,7 +240,7 @@ class ExtractionsControllerTest < ActionDispatch::IntegrationTest
                  uri: nonexistent_uri.to_s,
                })
           assert_response(:unprocessable_entity)
-          assert_equal("application/json", response.content_type,
+          assert_equal("application/json", response.media_type,
                        response.body)
           assert_equal({
                          "uri" => [
@@ -260,7 +260,7 @@ class ExtractionsControllerTest < ActionDispatch::IntegrationTest
                  uri: uri,
                })
           assert_response(:unprocessable_entity)
-          assert_equal("application/json", response.content_type,
+          assert_equal("application/json", response.media_type,
                        response.body)
           assert_equal({
                          "uri" => [
@@ -278,7 +278,7 @@ class ExtractionsControllerTest < ActionDispatch::IntegrationTest
              params: {
                data: fixture_file_upload(file_fixture(fixture_name)),
              })
-        assert_equal("application/json", response.content_type,
+        assert_equal("application/json", response.media_type,
                      response.body)
         JSON.parse(response.body)["texts"].collect do |text|
           if block_given?
@@ -434,7 +434,7 @@ class ExtractionsControllerTest < ActionDispatch::IntegrationTest
                data: text,
                mime_type: mime_type,
              })
-        assert_equal("application/json", response.content_type,
+        assert_equal("application/json", response.media_type,
                      response.body)
         JSON.parse(response.body)["texts"].collect do |text|
           if block_given?
@@ -490,7 +490,7 @@ class ExtractionsControllerTest < ActionDispatch::IntegrationTest
                data: fixture_file_upload(file_fixture(path)),
                timeout: timeout,
              })
-        assert_equal("application/json", response.content_type,
+        assert_equal("application/json", response.media_type,
                      response.body)
         top_dir = File.expand_path("../../", __dir__)
         uri = URI.parse("file://#{top_dir}/#{path}")
@@ -508,7 +508,7 @@ class ExtractionsControllerTest < ActionDispatch::IntegrationTest
                params: {
                  data: fixture_file_upload(file_fixture("hello.csv")),
                }.merge(params))
-          assert_equal("application/json", response.content_type,
+          assert_equal("application/json", response.media_type,
                        response.body)
           JSON.parse(response.body)["texts"].collect do |text|
             {
