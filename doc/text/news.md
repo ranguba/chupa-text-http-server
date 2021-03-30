@@ -1,5 +1,11 @@
 # News
 
+## 1.0.7: 2021-03-30
+
+### Improvements
+
+  * Updated Ruby on Rails to 6.1.
+
 ## 1.0.6: 2021-03-26
 
 ### Improvements
