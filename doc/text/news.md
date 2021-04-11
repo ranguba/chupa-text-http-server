@@ -1,5 +1,11 @@
 # News
 
+## 1.0.8: 2021-04-12
+
+### Fixes
+
+  * Removed needless Action Cable related codes.
+
 ## 1.0.7: 2021-03-30
 
 ### Improvements
