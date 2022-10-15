@@ -18,6 +18,56 @@ You can run ChupaText HTTP server by the following command lines:
 % bin/rails server
 ```
 
+ChupaText HTTP server supports the following formats by default:
+
+  * CSV (`.csv`)
+  * Office Open XML:
+    * Document:
+      * `.docx`
+      * `.docm`
+      * `.dotx`
+      * `.dotm`
+    * Presentation:
+      * `.pptx`
+      * `.pptm`
+      * `.ppsx`
+      * `.ppsm`
+      * `.potx`
+      * `.potm`
+      * `.sldx`
+      * `.sldm`
+    * Workbook:
+      * `.xlsx`
+      * `.xlsm`
+      * `.xltx`
+      * `.xltm`
+  * OpenDocument:
+    * Presentation (`.odp`)
+    * Spreadsheet (`.ods`)
+    * Text (`.odt`)
+  * XML (`.xml`)
+
+You can enable more formats by adding ChupaText decomposer plugins to
+`Gemfile.local`. You can find ChupaText decomposer plugins at
+https://rubygems.org/search?query=chupa-text-decomposer- . See also
+`Gemfile.local.example`.
+
+For example, you can use
+[chupa-text-decomposer-pdf](https://rubygems.org/gems/chupa-text-decomposer-pdf)
+to add support for PDF:
+
+```ruby
+# Gemfile.local
+gem "chupa-text-decomposer-pdf"
+```
+
+Note that you need to run `bundle install` again when you change
+`Gemfile.local`:
+
+```console
+$ bundle install
+```
+
 You can use the ChupaText HTTP server by the following command line:
 
 ```console
