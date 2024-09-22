@@ -180,7 +180,7 @@ Here are optional parameters:
 
 ## Authors
 
-  * Kouhei Sutou `<kou@clear-code.com>`
+  * Sutou Kouhei `<kou@clear-code.com>`
 
   * Shimadzu Corporation
 

@@ -1,8 +1,13 @@
-ENV['RAILS_ENV'] ||= 'test'
-require_relative '../config/environment'
-require 'test/unit/rails/test_help'
-require 'webrick'
+ENV["RAILS_ENV"] ||= "test"
+require_relative "../config/environment"
+require "test/unit/rails/test_help"
+require "webrick"
 
-class ActiveSupport::TestCase
-  # Add more helper methods to be used by all tests here...
+module ActiveSupport
+  class TestCase
+    # Run tests in parallel with specified workers
+    # parallelize(workers: :number_of_processors)
+
+    # Add more helper methods to be used by all tests here...
+  end
 end
