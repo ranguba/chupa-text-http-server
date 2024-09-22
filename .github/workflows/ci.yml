@@ -76,6 +76,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Enable additional decomposors
+        uses: cp -a Gemfile.local{.example,}
+
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
