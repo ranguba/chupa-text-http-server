@@ -1,3 +1,5 @@
+require "chupa_text_http_server/version"
+
 version = ChupaTextHttpServer::Version::STRING
 
 desc "Tag #{version}"
