@@ -9,4 +9,4 @@ task :tag do
 end
 
 desc "Release #{ChupaTextHttpServer::VERSION}"
-task :release => :tag
+task release: :tag

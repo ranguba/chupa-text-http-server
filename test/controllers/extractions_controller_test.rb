@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 class ExtractionsControllerTest < ActionDispatch::IntegrationTest
   setup do
@@ -6,9 +6,9 @@ class ExtractionsControllerTest < ActionDispatch::IntegrationTest
 
   def run_http_server(content_type: nil, body: nil, status: nil)
     config = {
-      :Port => 0,
-      :Logger => Rails.logger,
-      :AccessLog => [
+      Port: 0,
+      Logger: Rails.logger,
+      AccessLog: [
         [Rails.logger, WEBrick::AccessLog::COMMON_LOG_FORMAT],
       ],
     }

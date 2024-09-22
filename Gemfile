@@ -44,11 +44,11 @@ group :test do
   gem "capybara"
   gem "selenium-webdriver"
   # Use test-unit
-  gem 'test-unit-rails'
+  gem "test-unit-rails"
   gem "webrick"
 end
 
-gem 'chupa-text', '>= 1.3.0'#, path: '../chupa-text'
+gem "chupa-text", ">= 1.3.0" # , path: "../chupa-text"
 local_gemfile = "#{__dir__}/Gemfile.local"
 if File.exist?(local_gemfile)
   eval(File.read(local_gemfile), binding, local_gemfile, 1)
