@@ -1,3 +1,5 @@
 module ChupaTextHttpServer
-  VERSION = "1.0.9"
+  module Version
+    STRING = "1.0.9"
+  end
 end

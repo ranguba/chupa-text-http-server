@@ -1,12 +1,12 @@
-require "chupa_text_http_server/version"
+version = ChupaTextHttpServer::Version::STRING
 
-desc "Tag #{ChupaTextHttpServer::VERSION}"
+desc "Tag #{version}"
 task :tag do
   sh("git", "tag",
-     "-a", ChupaTextHttpServer::VERSION,
-     "-m", "#{ChupaTextHttpServer::VERSION} has been released!!!")
+     "-a", version,
+     "-m", "#{version} has been released!!!")
   sh("git", "push", "--tags")
 end
 
-desc "Release #{ChupaTextHttpServer::VERSION}"
+desc "Release #{version}"
 task release: :tag
