@@ -71,7 +71,9 @@ jobs:
           sudo apt-get install --no-install-recommends -y -V \
             curl \
             google-chrome-stable \
-            libjemalloc2
+            libgirepository1.0-dev \
+            libjemalloc2 \
+            libwebkit2gtk-4.1-dev
 
       - name: Checkout code
         uses: actions/checkout@v4
