@@ -4,7 +4,9 @@ source "https://rubygems.org"
 plugin "rubygems-requirements-system"
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
-gem "rails", "~> 7.2.1"
+gem "rails", "~> 8.0.5"
+# Rails 8.0 passes the quirks_mode option that was removed in json 3.0.0.
+gem "json", "< 3"
 # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem "sprockets-rails"
 # Use the Puma web server [https://github.com/puma/puma]
