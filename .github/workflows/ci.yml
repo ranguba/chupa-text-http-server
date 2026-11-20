@@ -73,6 +73,9 @@ jobs:
             google-chrome-stable \
             libgirepository1.0-dev \
             libjemalloc2 \
+            libreoffice-calc \
+            libreoffice-impress \
+            libreoffice-writer \
             libwebkit2gtk-4.1-dev
 
       - name: Checkout code
