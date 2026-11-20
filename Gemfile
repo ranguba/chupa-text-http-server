@@ -1,5 +1,8 @@
 source "https://rubygems.org"
 
+# Install system dependencies automatically [https://github.com/ruby-gnome/rubygems-requirements-system]
+plugin "rubygems-requirements-system"
+
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem "rails", "~> 7.2.1"
 # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
