@@ -1,5 +1,32 @@
 # News
 
+## 1.0.9: 2026-11-20
+
+### Improvements
+
+  * Updated Ruby on Rails to 8.1.
+    [GitHub#37][Reported by escooterclinic]
+
+  * Required Ruby 3.2 or later.
+
+  * Dropped Webpacker. Node.js and Yarn aren't needed anymore.
+
+  * Added rubygems-requirements-system as a Bundler plugin. System
+    dependencies of decomposers are installed automatically by
+    `bundle install`.
+
+  * Changed not to escape `<`, `>`, `&`, U+2028 and U+2029 in JSON
+    responses. This is the default behavior of Ruby on Rails 8.1.
+
+  * Added description about `Gemfile.local`.
+    [GitHub#17][Reported by Tomohisa Kusukawa]
+
+### Thanks
+
+  * escooterclinic
+
+  * Tomohisa Kusukawa
+
 ## 1.0.8: 2021-04-12
 
 ### Fixes
